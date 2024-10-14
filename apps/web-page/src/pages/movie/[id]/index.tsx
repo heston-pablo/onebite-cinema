@@ -1,17 +1,28 @@
 import { useRouter } from "next/router";
-import { getMovie } from "@/lib/api/movie";
+import { getAllMovies, getMovie } from "@/lib/api/movie";
 import styles from "./index.module.css";
 
 import type {
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
+  GetStaticPropsContext,
+  InferGetStaticPropsType,
 } from "next/types";
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export async function getStaticPaths() {
+  const movies = await getAllMovies();
+
+  return {
+    paths: movies.map(({ id }) => ({
+      params: { id: id.toString() },
+    })),
+    fallback: true,
+  };
+}
+
+export async function getStaticProps(context: GetStaticPropsContext) {
   const id = context.params!.id;
   const movie = await getMovie(Number(id));
 
-  if (movie === null) return { notFound: true };
+  if (!movie) return { notFound: true };
 
   return {
     props: { movie },
@@ -20,7 +31,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
 export default function MoviePage({
   movie,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const router = useRouter();
 
   if (router.isFallback) return "Loading...";
