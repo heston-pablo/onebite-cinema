@@ -4,11 +4,11 @@ import style from "./searchable-layout.module.css";
 
 import type React from "react";
 
-export default function SearchableLayout({
+export const SearchableLayout = ({
   children,
 }: {
   children: React.ReactNode;
-}) {
+}) => {
   const router = useRouter();
   const [search, setSearch] = useState("");
 
@@ -43,4 +43,4 @@ export default function SearchableLayout({
       {children}
     </div>
   );
-}
+};
