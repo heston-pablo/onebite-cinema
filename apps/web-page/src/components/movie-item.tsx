@@ -5,10 +5,10 @@ import type { Movie } from "@/types";
 
 type MovieItemProps = { movie: Movie };
 
-export default function MovieItem({ movie }: MovieItemProps) {
+export const MovieItem = ({ movie }: MovieItemProps) => {
   return (
     <Link href={`/movie/${movie.id}`}>
       <img src={movie.posterImgUrl} className={styles.poster_img} />
     </Link>
   );
-}
+};
